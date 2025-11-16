@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userSubmissionSchema = new mongoose.Schema({
-  // Personal Info - Only making the most critical fields required
+  // Personal Info
   customerName: { type: String, required: true },
   dateOfBirth: { type: Date },
   loanPurpose: { type: String },
@@ -24,7 +24,7 @@ const userSubmissionSchema = new mongoose.Schema({
   // ... other permanent address fields
 
   // Financial Info - Income is the most critical for matching
-  monthlyIncome: { type: Number, required: true },
+  monthlyIncome: { type: Number, required: true, default: 0 },
   monthlyCommission: { type: Number },
   hasExistingLoans: { type: Boolean, default: false },
   personalLoanOutstanding: { type: Number },
