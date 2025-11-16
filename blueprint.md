@@ -9,26 +9,26 @@ This document outlines the plan and progress for creating "FinCare," a modern fi
 ### Key Features
 
 1.  **Multi-Step User Form:** A 4-step process to collect user financial data. (Completed)
-2.  **Bank Matching & Ranking:** A results page displaying matched banks, ranked by approval rates and eligibility. (In Progress)
-3.  **Admin Panel:** A secure area for managing bank data and viewing user submissions.
+2.  **Bank Matching & Ranking:** A results page displaying matched banks. (Completed)
+3.  **Admin Panel:** A secure area for managing bank data and viewing user submissions. (In Progress)
 4.  **Responsive Design:** Optimized for desktop and tablet devices.
 5.  **Brand Identity:** The "FinCare" logo is prominently displayed.
 
-## Current Plan: Implement Bank Matching & Ranking
+## Current Plan: Finalize Admin Panel CRUD Functionality
 
-1.  **Backend Development (Node.js):**
-    *   **Define Bank Model:** Create a Mongoose schema (`bank.js`) to store bank profiles, including supported loan types, minimum income, interest rates, and approval rates.
-    *   **Create Admin Endpoint for Banks:** Implement a basic `POST /api/admin/banks` route to add/manage bank data for testing purposes.
-    *   **Implement Matching Algorithm:**
-        *   Create a `GET /api/banks/match` endpoint.
-        *   The endpoint will receive user financial data (loan purpose, income, etc.).
-        *   It will filter banks based on matching criteria (e.g., loan type supported, income requirements).
-        *   It will rank the filtered results based on: 1. Highest approval rate, 2. Eligibility match, 3. Interest rates.
-2.  **Frontend Development (Flutter):**
-    *   **Create Bank Results Screen:** Build a new screen (`bank_results_screen.dart`) to display the matched banks.
-    *   **Develop Bank Card Widget:** Create a reusable widget to display individual bank details.
-    *   **Integrate API Service:** Create a service to fetch matched banks from the backend.
-    *   **Update Navigation:** Connect the `SubmissionSuccessScreen` to the new results screen.
+1.  **Complete API Service (admin\_service.dart):**
+    *   Implement the `addBank`, `updateBank`, and `deleteBank` methods to send the corresponding `POST`, `PUT`, and `DELETE` requests to the backend API.
+2.  **Complete State Management (bank\_provider.dart):**
+    *   Implement `addBank`, `updateBank`, and `deleteBank` methods.
+    *   These methods will call the `AdminService`, handle loading/error states, and automatically refresh the bank list upon success.
+3.  **Flesh out the Edit/Add Form (admin\_bank\_edit\_screen.dart):**
+    *   Add controllers and `TextFormField` widgets for all remaining bank properties (interest rates, supported loans, etc.).
+    *   Implement the "Save" logic to differentiate between creating a new bank and updating an existing one.
+    *   Provide user feedback (e.g., a `SnackBar`) and navigate back to the dashboard upon successful save.
+4.  **Implement Deletion in Dashboard (admin\_dashboard\_screen.dart):**
+    *   Implement the `onPressed` logic for the delete button.
+    *   Show a confirmation dialog (`AlertDialog`) to prevent accidental deletions.
+    *   Call the `deleteBank` method from the `BankProvider` and show feedback.
 
 ---
 *This blueprint will be updated as the project progresses.*

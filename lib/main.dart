@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/form_provider.dart';
+import 'providers/bank_provider.dart';
 import 'screens/multi_step_form_screen.dart';
+import 'screens/admin/admin_dashboard_screen.dart';
+import 'screens/submission_success_screen.dart';
 
 void main() {
   runApp(
@@ -10,6 +13,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => FormProvider()),
+        ChangeNotifierProvider(create: (context) => BankProvider()),
       ],
       child: const FinCareApp(),
     ),
@@ -124,6 +128,8 @@ class FinCareApp extends StatelessWidget {
           home: const HomePage(),
           routes: {
             '/form': (context) => const MultiStepFormScreen(),
+            '/admin': (context) => const AdminDashboardScreen(),
+            '/success': (context) => const SubmissionSuccessScreen(),
           },
         );
       },
@@ -136,13 +142,19 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
-    return Scaffold(
+     final themeProvider = Provider.of<ThemeProvider>(context);
+     return Scaffold(
       appBar: AppBar(
         title: const Text('FinCare'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.admin_panel_settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/admin');
+            },
+            tooltip: 'Admin Panel',
+          ),
+           IconButton(
             icon: Icon(themeProvider.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode),
             onPressed: () => themeProvider.toggleTheme(),
             tooltip: 'Toggle Theme',
