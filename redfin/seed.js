@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Bank = require('./models/bank');
 
-const dbURI = 'mongodb://localhost:27017/fincare';
+// Connect to your MongoDB Atlas cluster
+const dbURI = 'mongodb+srv://redlotusconsultants_db_user:YpsUuMRrzTiz13jU@redlotus.5zlo9jt.mongodb.net/?appName=RedLotus';
 
 const sampleBanks = [
   {
@@ -42,12 +43,13 @@ const sampleBanks = [
   }
 ];
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(dbURI)
   .then(async () => {
-    console.log('MongoDB connected');
+    console.log('MongoDB Atlas connected');
+    // Clear existing data and insert fresh sample data
     await Bank.deleteMany({});
     await Bank.insertMany(sampleBanks);
-    console.log('Sample banks inserted');
+    console.log('Sample banks inserted into Atlas');
     mongoose.connection.close();
   })
   .catch(err => console.log(err));
