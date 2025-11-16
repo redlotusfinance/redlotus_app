@@ -1,34 +1,36 @@
 const mongoose = require('mongoose');
 
 const userSubmissionSchema = new mongoose.Schema({
-  // Personal Info
+  // Personal Info - Only making the most critical fields required
   customerName: { type: String, required: true },
-  dateOfBirth: { type: Date, required: true },
-  loanPurpose: { type: String, required: true },
-  profession: { type: String, required: true },
+  dateOfBirth: { type: Date },
+  loanPurpose: { type: String },
+  profession: { type: String },
   email: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
-  gender: { type: String, required: true },
-  maritalStatus: { type: String, required: true },
+  phoneNumber: { type: String },
+  gender: { type: String },
+  maritalStatus: { type: String },
 
   // Address Info
-  currentAddressLine1: { type: String, required: true },
+  currentAddressLine1: { type: String },
   currentAddressLine2: { type: String },
-  currentCity: { type: String, required: true },
-  currentDistrict: { type: String, required: true },
-  currentState: { type: String, required: true },
-  currentPinCode: { type: String, required: true },
+  currentCity: { type: String },
+  currentDistrict: { type: String },
+  currentState: { type: String },
+  currentPinCode: { type: String },
   currentLandmark: { type: String },
   isPermanentSameAsCurrent: { type: Boolean, default: false },
   permanentAddressLine1: { type: String },
   // ... other permanent address fields
 
-  // Financial Info
+  // Financial Info - Income is the most critical for matching
   monthlyIncome: { type: Number, required: true },
   monthlyCommission: { type: Number },
   hasExistingLoans: { type: Boolean, default: false },
   personalLoanOutstanding: { type: Number },
-  // ... other loan fields
+  carLoanOutstanding: { type: Number },
+  creditCardOutstanding: { type: Number },
+  otherLoanOutstanding: { type: Number },
   hasOverdraft: { type: Boolean, default: false },
   overdraftAmount: { type: Number },
   

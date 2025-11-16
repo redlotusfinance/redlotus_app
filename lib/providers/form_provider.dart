@@ -91,8 +91,9 @@ class FormProvider with ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    // Serialize the form data
+    // Serialize the complete form data
     final Map<String, dynamic> formData = {
+      // Personal Info
       'customerName': customerName,
       'dateOfBirth': dateOfBirth?.toIso8601String(),
       'loanPurpose': loanPurpose,
@@ -101,7 +102,28 @@ class FormProvider with ChangeNotifier {
       'phoneNumber': phoneNumber,
       'gender': gender,
       'maritalStatus': maritalStatus,
-      // ... (add all other fields)
+
+      // Address Info
+      'currentAddressLine1': currentAddressLine1,
+      'currentAddressLine2': currentAddressLine2,
+      'currentCity': currentCity,
+      'currentDistrict': currentDistrict,
+      'currentState': currentState,
+      'currentPinCode': currentPinCode,
+      'currentLandmark': currentLandmark,
+      'isPermanentSameAsCurrent': isPermanentSameAsCurrent,
+      // TODO: Add permanent address fields if needed
+
+      // Financial Info
+      'monthlyIncome': monthlyIncome,
+      'monthlyCommission': monthlyCommission,
+      'hasExistingLoans': hasExistingLoans,
+      'personalLoanOutstanding': personalLoanOutstanding,
+      'carLoanOutstanding': carLoanOutstanding,
+      'creditCardOutstanding': creditCardOutstanding,
+      'otherLoanOutstanding': otherLoanOutstanding,
+      'hasOverdraft': hasOverdraft,
+      'overdraftAmount': overdraftAmount,
     };
 
     try {
@@ -116,12 +138,15 @@ class FormProvider with ChangeNotifier {
         notifyListeners();
         return true; // Success
       } else {
+        // Log the actual server error for better debugging
+        print('Server Error: ${response.body}');
         _errorMessage = 'Failed to submit form. Server error.';
         _isLoading = false;
         notifyListeners();
         return false; // Failure
       }
     } catch (e) {
+      print('Connection Error: $e');
       _errorMessage = 'Failed to submit form. Please check your connection.';
       _isLoading = false;
       notifyListeners();
