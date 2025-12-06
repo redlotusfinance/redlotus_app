@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/bank_model.dart';
+import '../models/user_submission_model.dart'; // Import the new model
 import '../config.dart';
 
 class AdminService {
@@ -10,6 +11,8 @@ class AdminService {
     'Content-Type': 'application/json',
     'x-api-key': _apiKey,
   };
+
+  // --- Bank Operations ---
 
   Future<List<Bank>> getAllBanks() async {
     final uri = Uri.parse('$apiBaseUrl/api/admin/banks');
@@ -62,6 +65,20 @@ class AdminService {
 
     if (response.statusCode != 200) {
       throw Exception('Failed to delete bank: ${response.body}');
+    }
+  }
+
+  // --- Submission Operations ---
+
+  Future<List<UserSubmission>> getAllSubmissions() async {
+    final uri = Uri.parse('$apiBaseUrl/api/user/submissions');
+    final response = await http.get(uri, headers: { 'x-api-key': _apiKey });
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['data'];
+      return data.map((json) => UserSubmission.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load submissions: ${response.body}');
     }
   }
 }

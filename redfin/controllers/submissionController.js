@@ -21,6 +21,19 @@ const submitForm = async (req, res) => {
   }
 };
 
+// @desc    Get all user submissions
+// @route   GET /api/user/submissions
+// @access  Private (Admin)
+const getAllSubmissions = async (req, res) => {
+  try {
+    const submissions = await UserSubmission.find().sort({ submissionDate: -1 }); // Newest first
+    res.status(200).json({ data: submissions });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching submissions', error: error.message });
+  }
+};
+
 module.exports = {
   submitForm,
+  getAllSubmissions,
 };

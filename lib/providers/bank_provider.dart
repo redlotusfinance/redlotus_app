@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import '../services/admin_service.dart';
 import '../models/bank_model.dart';
+import '../models/user_submission_model.dart';
 
 class BankProvider with ChangeNotifier {
   final AdminService _adminService = AdminService();
   
+  // Bank State
   List<Bank> _banks = [];
   List<Bank> get banks => _banks;
+
+  // Submission State
+  List<UserSubmission> _submissions = [];
+  List<UserSubmission> get submissions => _submissions;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
+
+  // --- Bank Methods ---
 
   Future<void> fetchBanks() async {
     _isLoading = true;
@@ -76,9 +84,25 @@ class BankProvider with ChangeNotifier {
       return true;
     } catch (e) {
       _errorMessage = e.toString();
-      // If the delete fails, we might need to refresh the list to be safe
       await fetchBanks(); 
       return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // --- Submission Methods ---
+
+  Future<void> fetchSubmissions() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _submissions = await _adminService.getAllSubmissions();
+    } catch (e) {
+      _errorMessage = e.toString();
     } finally {
       _isLoading = false;
       notifyListeners();
