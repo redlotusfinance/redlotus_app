@@ -6,6 +6,10 @@ const bankSchema = new mongoose.Schema({
   supportedLoanTypes: [{ 
     type: String, 
     enum: [
+      'Personal Loan',
+      'Home loan',
+      'Loan Against Property',
+      'Mortgage loan',
       'Business Loan',
       'Working Capital Loan',
       'Machinery Loan',

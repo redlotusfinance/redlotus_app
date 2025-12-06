@@ -8,7 +8,8 @@ const sampleBanks = [
   {
     name: 'Capital One',
     logoUrl: 'https://logos-world.net/wp-content/uploads/2020/04/Capital-One-Logo.png',
-    supportedLoanTypes: ['Personal', 'Business'],
+    // Updated to match the new form values
+    supportedLoanTypes: ['Personal Loan', 'Business Loan', 'Working Capital Loan'],
     minIncome: 50000,
     maxLoanAmount: 50000,
     interestRate: { min: 3.99, max: 8.99 },
@@ -20,7 +21,8 @@ const sampleBanks = [
   {
     name: 'Wells Fargo',
     logoUrl: 'https://logos-world.net/wp-content/uploads/2020/05/Wells-Fargo-Logo.png',
-    supportedLoanTypes: ['Personal', 'Home', 'Mortgage'],
+    // Updated to match the new form values
+    supportedLoanTypes: ['Personal Loan', 'Home loan', 'Mortgage loan', 'Home Construction'],
     minIncome: 60000,
     maxLoanAmount: 200000,
     interestRate: { min: 4.5, max: 9.5 },
@@ -32,7 +34,8 @@ const sampleBanks = [
    {
     name: 'Citibank',
     logoUrl: 'https://logos-world.net/wp-content/uploads/2020/04/Citibank-Logo.png',
-    supportedLoanTypes: ['Personal', 'Mortgage', 'Business'],
+    // Updated to match the new form values
+    supportedLoanTypes: ['Personal Loan', 'Mortgage loan', 'Business Loan', 'Loan consolidation'],
     minIncome: 70000,
     maxLoanAmount: 150000,
     interestRate: { min: 5.0, max: 10.0 },
