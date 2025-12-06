@@ -27,6 +27,27 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
   late TextEditingController _appUrlController;
   late TextEditingController _keyFeaturesController;
   List<String> _supportedLoanTypes = [];
+  
+  // Define the master list of loan types
+  final List<String> _allLoanTypes = [
+    'Business Loan',
+    'Working Capital Loan',
+    'Machinery Loan',
+    'Construction Loan',
+    'Solar Loan',
+    'Marriege',
+    'New Business Set-up',
+    'Loan consolidation',
+    'Credit card Payment',
+    'Land Purchase',
+    'Home Construction',
+    'Land buy+Construction',
+    'Business Expension',
+    'Two wheeler',
+    'New Car',
+    'Old Car Finance',
+    'SME Loan',
+  ];
 
 
   @override
@@ -118,7 +139,8 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
                 TextFormField(controller: _keyFeaturesController, decoration: const InputDecoration(labelText: 'Key Features (comma-separated)')),
                 const SizedBox(height: 20),
                 Text('Supported Loan Types', style: Theme.of(context).textTheme.titleMedium),
-                ...['Personal', 'Home', 'Mortgage', 'Business'].map((type) {
+                // Use the new master list to build the checklist
+                ..._allLoanTypes.map((type) {
                   return CheckboxListTile(
                     title: Text(type),
                     value: _supportedLoanTypes.contains(type),
@@ -132,7 +154,7 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
                       });
                     },
                   );
-                }).toList(),
+                }),
               ],
             ),
           ),

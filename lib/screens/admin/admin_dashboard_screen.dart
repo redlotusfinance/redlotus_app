@@ -33,8 +33,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
           ),
         ],
       ),
@@ -66,6 +66,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 MaterialPageRoute(builder: (context) => const AdminBankEditScreen()),
               );
             },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              // Navigate back to the home screen, removing all previous routes
+              Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+            },
+            tooltip: 'Logout',
           ),
         ],
       ),

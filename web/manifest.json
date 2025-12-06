@@ -1,11 +1,11 @@
 {
-    "name": "FinCare",
-    "short_name": "FinCare",
+    "name": "RedFin",
+    "short_name": "RedFin",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "FinCare - your partner in financial need",
+    "description": "RedFin - your partner in financial need",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

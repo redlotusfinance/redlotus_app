@@ -14,6 +14,69 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
   Widget build(BuildContext context) {
     final formProvider = Provider.of<FormProvider>(context);
 
+    // Define the list of professions
+    final List<String> professions = [
+      'Salaried',
+      'Self-Employed',
+      'Professional',
+      'Lic Agent',
+      'Freelancer',
+      'Doctor',
+      'CA/CS/CMS',
+      'D-Pharma/B-Pharma',
+      'Medical',
+      'SME',
+    ];
+    
+    // Define the new list of loan purposes
+    final List<String> loanPurposes = [
+      'Business Loan',
+      'Working Capital Loan',
+      'Machinery Loan',
+      'Construction Loan',
+      'Solar Loan',
+      'Marriege',
+      'New Business Set-up',
+      'Loan consolidation',
+      'Credit card Payment',
+      'Land Purchase',
+      'Home Construction',
+      'Land buy+Construction',
+      'Business Expension',
+      'Two wheeler',
+      'New Car',
+      'Old Car Finance',
+      'SME Loan',
+    ];
+    
+    // Define the new list of loan types
+    final List<String> loanTypes = [
+      'Personal Loan',
+      'Home loan',
+      'Loan Against Property',
+      'Mortgage loan',
+      'Business Loan',
+      'Car Loan',
+      'Two wheeler Loan',
+    ];
+
+    // Define items for the 'Type of Firm' dropdown
+    final List<String> firmTypes = [
+      'Propritor',
+      'SME',
+      'OPC',
+      'LLP',
+      'PVT LTD',
+      'LTD',
+    ];
+    
+    // Define items for the 'Designation' dropdown
+     final List<String> selfEmployedDesignations = [
+      'Propritor',
+      'Director',
+      'Non Participating Director',
+    ];
+
     return Form(
       key: formProvider.personalInfoFormKey,
       child: SingleChildScrollView(
@@ -24,7 +87,9 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
             children: [
               Text('Personal Information', style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 24),
+
               TextFormField(
+                initialValue: formProvider.customerName,
                 decoration: const InputDecoration(labelText: 'Customer Name'),
                 validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
                 onSaved: (value) => formProvider.customerName = value!,
@@ -52,33 +117,126 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
                  validator: (value) => formProvider.dateOfBirth == null ? 'Please select your date of birth' : null,
               ),
               const SizedBox(height: 16),
+
+              // --- New Fields ---
+              TextFormField(
+                initialValue: formProvider.spouseName,
+                decoration: const InputDecoration(labelText: 'Spouse Name'),
+                validator: (value) => value == null || value.isEmpty ? 'Please enter spouse\'s name' : null,
+                onSaved: (value) => formProvider.spouseName = value,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                initialValue: formProvider.fatherName,
+                decoration: const InputDecoration(labelText: 'Father Name'),
+                validator: (value) => value == null || value.isEmpty ? 'Please enter father\'s name' : null,
+                onSaved: (value) => formProvider.fatherName = value,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                initialValue: formProvider.motherName,
+                decoration: const InputDecoration(labelText: 'Mother Name (Optional)'),
+                onSaved: (value) => formProvider.motherName = value,
+              ),
+              const SizedBox(height: 16),
+              
               DropdownButtonFormField<String>(
+                initialValue: formProvider.loanPurpose,
                 decoration: const InputDecoration(labelText: 'Loan Purpose'),
-                items: ['Personal', 'Home', 'Mortgage', 'Business']
+                items: loanPurposes
                     .map((label) => DropdownMenuItem(
                           value: label,
                           child: Text(label),
                         ))
                     .toList(),
-                onChanged: (value) => formProvider.loanPurpose = value,
+                onChanged: (value) => setState(() => formProvider.loanPurpose = value),
                 onSaved: (value) => formProvider.loanPurpose = value,
                 validator: (value) => value == null ? 'Please select a loan purpose' : null,
               ),
               const SizedBox(height: 16),
+
               DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Profession'),
-                items: ['Salaried', 'Self-Employed', 'Business Owner', 'Other']
+                initialValue: formProvider.loanType,
+                decoration: const InputDecoration(labelText: 'Loan Type'),
+                items: loanTypes
                     .map((label) => DropdownMenuItem(
                           value: label,
                           child: Text(label),
                         ))
                     .toList(),
-                onChanged: (value) => formProvider.profession = value,
-                 onSaved: (value) => formProvider.profession = value,
+                onChanged: (value) => setState(() => formProvider.loanType = value),
+                onSaved: (value) => formProvider.loanType = value,
+                validator: (value) => value == null ? 'Please select a loan type' : null,
+              ),
+              
+              const SizedBox(height: 16),
+
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(labelText: 'Profession'),
+                initialValue: formProvider.profession,
+                items: professions
+                    .map((label) => DropdownMenuItem(
+                          value: label,
+                          child: Text(label),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  formProvider.updateProfession(value);
+                },
                 validator: (value) => value == null ? 'Please select a profession' : null,
               ),
+
+              // --- Conditional Fields ---
+              if (formProvider.profession == 'Salaried')
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: TextFormField(
+                    initialValue: formProvider.companyName,
+                    decoration: const InputDecoration(labelText: 'Company Name'),
+                    onSaved: (value) => formProvider.companyName = value,
+                    validator: (value) => value!.isEmpty ? 'Please enter your company name' : null,
+                  ),
+                ),
+
+              if (formProvider.profession == 'Self-Employed') ...[
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(labelText: 'Type of Firm'),
+                    initialValue: formProvider.firmType,
+                    items: firmTypes
+                        .map((label) => DropdownMenuItem(
+                              value: label,
+                              child: Text(label),
+                            ))
+                        .toList(),
+                    onChanged: (value) => setState(() => formProvider.firmType = value),
+                    onSaved: (value) => formProvider.firmType = value,
+                    validator: (value) => value == null ? 'Please select a firm type' : null,
+                  ),
+                ),
+                 Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(labelText: 'Designation'),
+                    initialValue: formProvider.selfEmployedDesignation,
+                    items: selfEmployedDesignations
+                        .map((label) => DropdownMenuItem(
+                              value: label,
+                              child: Text(label),
+                            ))
+                        .toList(),
+                    onChanged: (value) => setState(() => formProvider.selfEmployedDesignation = value),
+                    onSaved: (value) => formProvider.selfEmployedDesignation = value,
+                    validator: (value) => value == null ? 'Please select a designation' : null,
+                  ),
+                ),
+              ],
+              
               const SizedBox(height: 16),
+
               TextFormField(
+                initialValue: formProvider.email,
                 decoration: const InputDecoration(labelText: 'Email ID'),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
@@ -90,6 +248,7 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                initialValue: formProvider.phoneNumber,
                 decoration: const InputDecoration(labelText: 'Phone Number'),
                 keyboardType: TextInputType.phone,
                 validator: (value) => value == null || value.isEmpty ? 'Please enter your phone number' : null,
@@ -115,13 +274,9 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
                   );
                 }).toList(),
               ),
-               if (formProvider.gender == null)
-                const Padding(
-                  padding: EdgeInsets.only(left: 12.0),
-                  child: Text('Please select a gender', style: TextStyle(color: Colors.red, fontSize: 12)),
-                ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
+                initialValue: formProvider.maritalStatus,
                 decoration: const InputDecoration(labelText: 'Marital Status'),
                 items: ['Single', 'Married', 'Divorced', 'Widowed']
                     .map((label) => DropdownMenuItem(
@@ -129,7 +284,7 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
                           child: Text(label),
                         ))
                     .toList(),
-                onChanged: (value) => formProvider.maritalStatus = value,
+                onChanged: (value) => setState(() => formProvider.maritalStatus = value),
                 onSaved: (value) => formProvider.maritalStatus = value,
                 validator: (value) => value == null ? 'Please select a marital status' : null,
               ),

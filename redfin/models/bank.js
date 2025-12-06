@@ -3,7 +3,28 @@ const mongoose = require('mongoose');
 const bankSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   logoUrl: { type: String, required: true },
-  supportedLoanTypes: [{ type: String, enum: ['Personal', 'Home', 'Mortgage', 'Business'] }],
+  supportedLoanTypes: [{ 
+    type: String, 
+    enum: [
+      'Business Loan',
+      'Working Capital Loan',
+      'Machinery Loan',
+      'Construction Loan',
+      'Solar Loan',
+      'Marriege',
+      'New Business Set-up',
+      'Loan consolidation',
+      'Credit card Payment',
+      'Land Purchase',
+      'Home Construction',
+      'Land buy+Construction',
+      'Business Expension',
+      'Two wheeler',
+      'New Car',
+      'Old Car Finance',
+      'SME Loan',
+    ] 
+  }],
   minIncome: { type: Number, default: 0 },
   maxLoanAmount: { type: Number, default: 1000000 },
   interestRate: {
