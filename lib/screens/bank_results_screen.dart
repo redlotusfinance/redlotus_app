@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/form_provider.dart';
 import '../services/bank_service.dart';
 import '../widgets/bank_card.dart';
 import '../models/bank_model.dart';
 
 class BankResultsScreen extends StatefulWidget {
-  const BankResultsScreen({super.key});
+  final String loanPurpose;
+  final double monthlyIncome;
+
+  const BankResultsScreen({
+    super.key,
+    required this.loanPurpose,
+    required this.monthlyIncome,
+  });
 
   @override
   State<BankResultsScreen> createState() => _BankResultsScreenState();
@@ -18,10 +23,9 @@ class _BankResultsScreenState extends State<BankResultsScreen> {
   @override
   void initState() {
     super.initState();
-    final formProvider = Provider.of<FormProvider>(context, listen: false);
     _matchedBanksFuture = BankService().getMatchedBanks(
-      formProvider.loanPurpose!,
-      formProvider.monthlyIncome!,
+      widget.loanPurpose,
+      widget.monthlyIncome,
     );
   }
 
@@ -37,7 +41,10 @@ class _BankResultsScreenState extends State<BankResultsScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text('Error: ${snapshot.error}', textAlign: TextAlign.center),
+            ));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No banks found matching your criteria.'));
           } else {

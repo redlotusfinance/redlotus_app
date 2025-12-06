@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/form_provider.dart';
 import 'bank_results_screen.dart';
 
 class SubmissionSuccessScreen extends StatelessWidget {
@@ -30,12 +32,29 @@ class SubmissionSuccessScreen extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  // Get the form data from the provider
+                  final formProvider = Provider.of<FormProvider>(context, listen: false);
+                  
+                  // Navigate to results screen with the data
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const BankResultsScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => BankResultsScreen(
+                        loanPurpose: formProvider.loanPurpose ?? 'Personal', // Default to Personal if null
+                        monthlyIncome: formProvider.monthlyIncome ?? 0,
+                      ),
+                    ),
                   );
                 },
                 child: const Text('See Matched Banks'),
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () {
+                  // Navigate back to the home screen
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+                child: const Text('Back to Home'),
               ),
             ],
           ),

@@ -4,7 +4,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const app = express();
-const PORT = process.env.PORT || 8080; // Firebase App Hosting uses port 8080
+// Use port 8080 for production (Cloud Run/App Hosting) and 5000 for local development
+const PORT = process.env.PORT || 5000; 
 const HOST = '0.0.0.0'; 
 
 // Middleware
@@ -22,6 +23,12 @@ mongoose.connect(dbURI)
 const submissionRoutes = require('./routes/submissionRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const bankRoutes = require('./routes/bankRoutes');
+
+// Health Check Route - Important for deployment health checks
+app.get('/', (req, res) => {
+  res.status(200).send('RedFin Backend is running!');
+});
+
 app.use('/api/user', submissionRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/banks', bankRoutes);
