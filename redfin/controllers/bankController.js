@@ -1,24 +1,54 @@
 const Bank = require('../models/bank');
 
 // @desc    Get matched banks for a user
-// @route   GET /api/banks/match
+// @route   POST /api/banks/match
 // @access  Public
 const getMatchedBanks = async (req, res) => {
   try {
-    const { loanPurpose, monthlyIncome } = req.query;
+    const { loanPurpose, monthlyIncome, existingLoans } = req.body;
 
-    if (!loanPurpose || !monthlyIncome) {
+    if (!loanPurpose || monthlyIncome === undefined) {
       return res.status(400).json({ message: 'Loan purpose and monthly income are required.' });
     }
 
-    const banks = await Bank.find({
+    // 1. Calculate Financial Obligations
+    let totalEMIs = 0;
+    let totalCreditCardOutstanding = 0;
+
+    if (existingLoans && Array.isArray(existingLoans)) {
+      existingLoans.forEach(loan => {
+        const amount = Number(loan.amount) || 0;
+        if (loan.loanType === 'Credit Card') {
+          totalCreditCardOutstanding += amount;
+        } else {
+          totalEMIs += amount;
+        }
+      });
+    }
+
+    // 2. Fetch Potential Banks (Basic Filtering)
+    const potentialBanks = await Bank.find({
       supportedLoanTypes: loanPurpose,
       minIncome: { $lte: monthlyIncome },
     });
 
-    // Rank the banks
-    const rankedBanks = banks.sort((a, b) => {
-      // 1. Highest LTV (Loan To Value) - formerly approvalRate
+    // 3. Filter by Eligibility Formula
+    // Formula: eligibleIncome = NetSalary * (LTV / 100) - All EMIs - (0.05 * CreditCardOutstanding)
+    // Rule: eligibleIncome >= 3000
+    
+    const eligibleBanks = potentialBanks.filter(bank => {
+      const bankLTV = bank.ltv || 0; 
+      const eligibleIncome = (monthlyIncome * (bankLTV / 100)) - totalEMIs - (0.05 * totalCreditCardOutstanding);
+      
+      // Optional: You can log this for debugging if needed
+      // console.log(`Bank: ${bank.name}, LTV: ${bankLTV}, Eligible Income: ${eligibleIncome}`);
+      
+      return eligibleIncome >= 3000;
+    });
+
+    // 4. Rank the Banks
+    const rankedBanks = eligibleBanks.sort((a, b) => {
+      // 1. Highest LTV (Loan To Value)
       if (b.ltv !== a.ltv) {
         return b.ltv - a.ltv;
       }

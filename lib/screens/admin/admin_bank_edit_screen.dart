@@ -208,7 +208,7 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
                       });
                     },
                   );
-                }).toList(),
+                }),
               ],
             ),
           ),

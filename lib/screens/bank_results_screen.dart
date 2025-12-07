@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import '../services/bank_service.dart';
 import '../widgets/bank_card.dart';
 import '../models/bank_model.dart';
+import '../models/existing_loan_model.dart';
 
 class BankResultsScreen extends StatefulWidget {
   final String loanPurpose;
   final double monthlyIncome;
+  final List<ExistingLoan> existingLoans;
 
   const BankResultsScreen({
     super.key,
     required this.loanPurpose,
     required this.monthlyIncome,
+    required this.existingLoans,
   });
 
   @override
@@ -26,6 +29,7 @@ class _BankResultsScreenState extends State<BankResultsScreen> {
     _matchedBanksFuture = BankService().getMatchedBanks(
       widget.loanPurpose,
       widget.monthlyIncome,
+      widget.existingLoans,
     );
   }
 
@@ -46,7 +50,16 @@ class _BankResultsScreenState extends State<BankResultsScreen> {
               child: Text('Error: ${snapshot.error}', textAlign: TextAlign.center),
             ));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No banks found matching your criteria.'));
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'No banks found matching your criteria based on your income and existing obligations.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            );
           } else {
             final banks = snapshot.data!;
             return ListView.builder(

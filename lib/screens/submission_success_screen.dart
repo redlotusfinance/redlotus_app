@@ -40,8 +40,9 @@ class SubmissionSuccessScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => BankResultsScreen(
-                        loanPurpose: formProvider.loanPurpose ?? 'Personal', // Default to Personal if null
+                        loanPurpose: formProvider.loanPurpose ?? 'Personal', 
                         monthlyIncome: formProvider.monthlyIncome ?? 0,
+                        existingLoans: formProvider.existingLoansList,
                       ),
                     ),
                   );
