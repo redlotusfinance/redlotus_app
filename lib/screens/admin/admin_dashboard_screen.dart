@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/bank_provider.dart';
 import 'admin_bank_edit_screen.dart';
-import 'submission_list_screen.dart'; // Import the new screen
+import 'submission_list_screen.dart'; 
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -36,8 +36,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
           ),
         ],
       ),
@@ -128,9 +128,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ),
         ],
       ),
-      body: _currentIndex == 0 
-          ? Consumer<BankProvider>(builder: (ctx, provider, _) => _buildBankList(provider))
-          : const SubmissionListScreen(),
+      body: IndexedStack( // Use IndexedStack to preserve state
+        index: _currentIndex,
+        children: [
+          Consumer<BankProvider>(builder: (ctx, provider, _) => _buildBankList(provider)),
+          const SubmissionListScreen(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -138,6 +142,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             _currentIndex = index;
           });
         },
+        type: BottomNavigationBarType.fixed, // Explicitly set type
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance),

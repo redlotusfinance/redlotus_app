@@ -18,9 +18,9 @@ const getMatchedBanks = async (req, res) => {
 
     // Rank the banks
     const rankedBanks = banks.sort((a, b) => {
-      // 1. Highest approval rate
-      if (b.approvalRate !== a.approvalRate) {
-        return b.approvalRate - a.approvalRate;
+      // 1. Highest LTV (Loan To Value) - formerly approvalRate
+      if (b.ltv !== a.ltv) {
+        return b.ltv - a.ltv;
       }
       // 2. Lowest interest rate
       return a.interestRate.min - b.interestRate.min;

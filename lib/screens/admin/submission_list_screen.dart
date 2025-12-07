@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/bank_provider.dart';
-// import 'submission_detail_screen.dart'; // Will create this next
+import 'submission_detail_screen.dart'; // Import the detail screen
 
 class SubmissionListScreen extends StatefulWidget {
   const SubmissionListScreen({super.key});
@@ -50,11 +50,11 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                       ? "${submission.submissionDate!.day}/${submission.submissionDate!.month}/${submission.submissionDate!.year}"
                       : ""),
                   onTap: () {
-                    // Navigate to detail screen (to be implemented)
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SubmissionDetailScreen(submission: submission)),
-                    // );
+                    // Navigate to detail screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SubmissionDetailScreen(submission: submission)),
+                    );
                   },
                 ),
               );

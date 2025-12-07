@@ -22,10 +22,12 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
   late TextEditingController _maxLoanController;
   late TextEditingController _minRateController;
   late TextEditingController _maxRateController;
-  late TextEditingController _approvalRateController;
+  late TextEditingController _ltvController; // Renamed
   late TextEditingController _taglineController;
   late TextEditingController _appUrlController;
   late TextEditingController _keyFeaturesController;
+  late TextEditingController _minAgeController;
+  late TextEditingController _maxAgeController;
   List<String> _supportedLoanTypes = [];
   
   // Define the master list of loan types
@@ -47,6 +49,10 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
     'New Car',
     'Old Car Finance',
     'SME Loan',
+    'Personal Loan',
+    'Home loan',
+    'Loan Against Property',
+    'Mortgage loan',
   ];
 
 
@@ -60,10 +66,12 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
     _maxLoanController = TextEditingController(text: widget.bank?.maxLoanAmount.toString() ?? '');
     _minRateController = TextEditingController(text: widget.bank?.interestRate['min']?.toString() ?? '');
     _maxRateController = TextEditingController(text: widget.bank?.interestRate['max']?.toString() ?? '');
-    _approvalRateController = TextEditingController(text: widget.bank?.approvalRate.toString() ?? '');
+    _ltvController = TextEditingController(text: widget.bank?.ltv.toString() ?? ''); // Renamed
     _taglineController = TextEditingController(text: widget.bank?.tagline ?? '');
     _appUrlController = TextEditingController(text: widget.bank?.applicationUrl ?? '');
     _keyFeaturesController = TextEditingController(text: widget.bank?.keyFeatures.join(', ') ?? '');
+    _minAgeController = TextEditingController(text: widget.bank?.minAge?.toString() ?? '18');
+    _maxAgeController = TextEditingController(text: widget.bank?.maxAge?.toString() ?? '65');
     _supportedLoanTypes = widget.bank?.supportedLoanTypes ?? [];
   }
 
@@ -81,11 +89,13 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
           'min': double.parse(_minRateController.text),
           'max': double.parse(_maxRateController.text),
         },
-        approvalRate: double.parse(_approvalRateController.text),
+        ltv: double.parse(_ltvController.text), // Renamed
         tagline: _taglineController.text,
         applicationUrl: _appUrlController.text,
         keyFeatures: _keyFeaturesController.text.split(',').map((e) => e.trim()).toList(),
         supportedLoanTypes: _supportedLoanTypes,
+        minAge: int.tryParse(_minAgeController.text),
+        maxAge: int.tryParse(_maxAgeController.text),
       );
 
       bool success = false;
@@ -133,13 +143,29 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
                 TextFormField(controller: _appUrlController, decoration: const InputDecoration(labelText: 'Application URL'), validator: (v) => v!.isEmpty ? 'Required' : null),
                 TextFormField(controller: _minIncomeController, decoration: const InputDecoration(labelText: 'Minimum Income'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null),
                 TextFormField(controller: _maxLoanController, decoration: const InputDecoration(labelText: 'Max Loan Amount'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null),
-                TextFormField(controller: _minRateController, decoration: const InputDecoration(labelText: 'Min Interest Rate'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null),
-                TextFormField(controller: _maxRateController, decoration: const InputDecoration(labelText: 'Max Interest Rate'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null),
-                TextFormField(controller: _approvalRateController, decoration: const InputDecoration(labelText: 'Approval Rate (%)'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null),
+                Row(
+                  children: [
+                    Expanded(child: TextFormField(controller: _minRateController, decoration: const InputDecoration(labelText: 'Min Interest Rate'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null)),
+                    const SizedBox(width: 16),
+                    Expanded(child: TextFormField(controller: _maxRateController, decoration: const InputDecoration(labelText: 'Max Interest Rate'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(child: TextFormField(controller: _minAgeController, decoration: const InputDecoration(labelText: 'Min Age'), keyboardType: TextInputType.number)),
+                    const SizedBox(width: 16),
+                    Expanded(child: TextFormField(controller: _maxAgeController, decoration: const InputDecoration(labelText: 'Max Age'), keyboardType: TextInputType.number)),
+                  ],
+                ),
+                TextFormField(
+                  controller: _ltvController, // Renamed
+                  decoration: const InputDecoration(labelText: 'LTV (Loan To Value) %'), // Updated Label
+                  keyboardType: TextInputType.number, 
+                  validator: (v) => v!.isEmpty ? 'Required' : null
+                ),
                 TextFormField(controller: _keyFeaturesController, decoration: const InputDecoration(labelText: 'Key Features (comma-separated)')),
                 const SizedBox(height: 20),
                 Text('Supported Loan Types', style: Theme.of(context).textTheme.titleMedium),
-                // Use the new master list to build the checklist
                 ..._allLoanTypes.map((type) {
                   return CheckboxListTile(
                     title: Text(type),
@@ -154,7 +180,7 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
                       });
                     },
                   );
-                }),
+                }).toList(),
               ],
             ),
           ),

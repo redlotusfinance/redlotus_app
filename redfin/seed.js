@@ -8,12 +8,11 @@ const sampleBanks = [
   {
     name: 'Capital One',
     logoUrl: 'https://logos-world.net/wp-content/uploads/2020/04/Capital-One-Logo.png',
-    // Updated to match the new form values
     supportedLoanTypes: ['Personal Loan', 'Business Loan', 'Working Capital Loan'],
     minIncome: 50000,
     maxLoanAmount: 50000,
     interestRate: { min: 3.99, max: 8.99 },
-    approvalRate: 85,
+    ltv: 85, // Renamed from approvalRate
     keyFeatures: ['No annual fee', 'Travel rewards', 'Cash back'],
     applicationUrl: 'https://www.capitalone.com/',
     tagline: 'Best for travel rewards'
@@ -21,12 +20,11 @@ const sampleBanks = [
   {
     name: 'Wells Fargo',
     logoUrl: 'https://logos-world.net/wp-content/uploads/2020/05/Wells-Fargo-Logo.png',
-    // Updated to match the new form values
     supportedLoanTypes: ['Personal Loan', 'Home loan', 'Mortgage loan', 'Home Construction'],
     minIncome: 60000,
     maxLoanAmount: 200000,
     interestRate: { min: 4.5, max: 9.5 },
-    approvalRate: 80,
+    ltv: 80, // Renamed from approvalRate
     keyFeatures: ['Wide range of loan options', 'Physical branch locations'],
     applicationUrl: 'https://www.wellsfargo.com/',
     tagline: 'Great for in-person service'
@@ -34,12 +32,11 @@ const sampleBanks = [
    {
     name: 'Citibank',
     logoUrl: 'https://logos-world.net/wp-content/uploads/2020/04/Citibank-Logo.png',
-    // Updated to match the new form values
     supportedLoanTypes: ['Personal Loan', 'Mortgage loan', 'Business Loan', 'Loan consolidation'],
     minIncome: 70000,
     maxLoanAmount: 150000,
     interestRate: { min: 5.0, max: 10.0 },
-    approvalRate: 90,
+    ltv: 90, // Renamed from approvalRate
     keyFeatures: ['Global banking services', 'Competitive interest rates'],
     applicationUrl: 'https://www.citi.com/',
     tagline: 'Excellent for international banking'

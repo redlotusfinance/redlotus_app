@@ -18,7 +18,7 @@ class BankCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.network(bank.logoUrl, width: 100, height: 50),
+                Image.network(bank.logoUrl, width: 100, height: 50, errorBuilder: (c,e,s) => const Icon(Icons.business)),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -35,7 +35,7 @@ class BankCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildInfoColumn('Approval Rate', '${bank.approvalRate}%'),
+                _buildInfoColumn('LTV (Loan To Value)', '${bank.ltv}%'), // Updated label and property
                 _buildInfoColumn('Interest Rate', '${bank.interestRate['min']}% - ${bank.interestRate['max']}%'),
               ],
             ),

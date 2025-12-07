@@ -35,10 +35,12 @@ const bankSchema = new mongoose.Schema({
     min: { type: Number, required: true },
     max: { type: Number, required: true },
   },
-  approvalRate: { type: Number, required: true, min: 0, max: 100 },
+  ltv: { type: Number, required: true, min: 0, max: 100 }, // Renamed from approvalRate
   keyFeatures: [String],
   applicationUrl: { type: String, required: true },
-  tagline: { type: String }
+  tagline: { type: String },
+  minAge: { type: Number, default: 18 },
+  maxAge: { type: Number, default: 65 }
 });
 
 module.exports = mongoose.model('Bank', bankSchema);
