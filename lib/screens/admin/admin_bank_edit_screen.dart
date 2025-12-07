@@ -20,9 +20,12 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
   late TextEditingController _logoUrlController;
   late TextEditingController _minIncomeController;
   late TextEditingController _maxLoanController;
+  late TextEditingController _minLoanController; // New
+  late TextEditingController _minCibilController; // New
+  late TextEditingController _multiplierController; // New
   late TextEditingController _minRateController;
   late TextEditingController _maxRateController;
-  late TextEditingController _ltvController; // Renamed
+  late TextEditingController _ltvController;
   late TextEditingController _taglineController;
   late TextEditingController _appUrlController;
   late TextEditingController _keyFeaturesController;
@@ -59,14 +62,16 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with existing bank data or empty strings
     _nameController = TextEditingController(text: widget.bank?.name ?? '');
     _logoUrlController = TextEditingController(text: widget.bank?.logoUrl ?? '');
     _minIncomeController = TextEditingController(text: widget.bank?.minIncome.toString() ?? '');
     _maxLoanController = TextEditingController(text: widget.bank?.maxLoanAmount.toString() ?? '');
+    _minLoanController = TextEditingController(text: widget.bank?.minLoanAmount.toString() ?? '0'); // New
+    _minCibilController = TextEditingController(text: widget.bank?.minCibilScore.toString() ?? '0'); // New
+    _multiplierController = TextEditingController(text: widget.bank?.multiplier.toString() ?? '1'); // New
     _minRateController = TextEditingController(text: widget.bank?.interestRate['min']?.toString() ?? '');
     _maxRateController = TextEditingController(text: widget.bank?.interestRate['max']?.toString() ?? '');
-    _ltvController = TextEditingController(text: widget.bank?.ltv.toString() ?? ''); // Renamed
+    _ltvController = TextEditingController(text: widget.bank?.ltv.toString() ?? '');
     _taglineController = TextEditingController(text: widget.bank?.tagline ?? '');
     _appUrlController = TextEditingController(text: widget.bank?.applicationUrl ?? '');
     _keyFeaturesController = TextEditingController(text: widget.bank?.keyFeatures.join(', ') ?? '');
@@ -85,11 +90,14 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
         logoUrl: _logoUrlController.text,
         minIncome: double.parse(_minIncomeController.text),
         maxLoanAmount: double.parse(_maxLoanController.text),
+        minLoanAmount: double.parse(_minLoanController.text), // New
+        minCibilScore: int.parse(_minCibilController.text),   // New
+        multiplier: double.parse(_multiplierController.text), // New
         interestRate: {
           'min': double.parse(_minRateController.text),
           'max': double.parse(_maxRateController.text),
         },
-        ltv: double.parse(_ltvController.text), // Renamed
+        ltv: double.parse(_ltvController.text),
         tagline: _taglineController.text,
         applicationUrl: _appUrlController.text,
         keyFeatures: _keyFeaturesController.text.split(',').map((e) => e.trim()).toList(),
@@ -141,13 +149,36 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
                 TextFormField(controller: _logoUrlController, decoration: const InputDecoration(labelText: 'Logo URL'), validator: (v) => v!.isEmpty ? 'Required' : null),
                 TextFormField(controller: _taglineController, decoration: const InputDecoration(labelText: 'Tagline'), validator: (v) => v!.isEmpty ? 'Required' : null),
                 TextFormField(controller: _appUrlController, decoration: const InputDecoration(labelText: 'Application URL'), validator: (v) => v!.isEmpty ? 'Required' : null),
-                TextFormField(controller: _minIncomeController, decoration: const InputDecoration(labelText: 'Minimum Income'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null),
-                TextFormField(controller: _maxLoanController, decoration: const InputDecoration(labelText: 'Max Loan Amount'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null),
+                
+                const SizedBox(height: 16),
+                const Text('Financial Criteria', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(child: TextFormField(controller: _minRateController, decoration: const InputDecoration(labelText: 'Min Interest Rate'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null)),
+                    Expanded(child: TextFormField(controller: _minIncomeController, decoration: const InputDecoration(labelText: 'Min Income'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null)),
                     const SizedBox(width: 16),
-                    Expanded(child: TextFormField(controller: _maxRateController, decoration: const InputDecoration(labelText: 'Max Interest Rate'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null)),
+                    Expanded(child: TextFormField(controller: _minCibilController, decoration: const InputDecoration(labelText: 'Min Cibil'), keyboardType: TextInputType.number)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(child: TextFormField(controller: _minLoanController, decoration: const InputDecoration(labelText: 'Min Loan Amount'), keyboardType: TextInputType.number)),
+                    const SizedBox(width: 16),
+                    Expanded(child: TextFormField(controller: _maxLoanController, decoration: const InputDecoration(labelText: 'Max Loan Amount'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(child: TextFormField(controller: _minRateController, decoration: const InputDecoration(labelText: 'Min Rate (%)'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null)),
+                    const SizedBox(width: 16),
+                    Expanded(child: TextFormField(controller: _maxRateController, decoration: const InputDecoration(labelText: 'Max Rate (%)'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(child: TextFormField(controller: _ltvController, decoration: const InputDecoration(labelText: 'LTV (%)'), keyboardType: TextInputType.number, validator: (v) => v!.isEmpty ? 'Required' : null)),
+                    const SizedBox(width: 16),
+                    Expanded(child: TextFormField(controller: _multiplierController, decoration: const InputDecoration(labelText: 'Multiplier'), keyboardType: TextInputType.number)),
                   ],
                 ),
                 Row(
@@ -157,15 +188,12 @@ class _AdminBankEditScreenState extends State<AdminBankEditScreen> {
                     Expanded(child: TextFormField(controller: _maxAgeController, decoration: const InputDecoration(labelText: 'Max Age'), keyboardType: TextInputType.number)),
                   ],
                 ),
-                TextFormField(
-                  controller: _ltvController, // Renamed
-                  decoration: const InputDecoration(labelText: 'LTV (Loan To Value) %'), // Updated Label
-                  keyboardType: TextInputType.number, 
-                  validator: (v) => v!.isEmpty ? 'Required' : null
-                ),
+                
+                const SizedBox(height: 16),
                 TextFormField(controller: _keyFeaturesController, decoration: const InputDecoration(labelText: 'Key Features (comma-separated)')),
                 const SizedBox(height: 20),
                 Text('Supported Loan Types', style: Theme.of(context).textTheme.titleMedium),
+                // Use the new master list to build the checklist
                 ..._allLoanTypes.map((type) {
                   return CheckboxListTile(
                     title: Text(type),

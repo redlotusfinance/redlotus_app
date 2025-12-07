@@ -1,12 +1,15 @@
 class Bank {
-  final String? id; // Nullable for new banks that don't have an ID yet
+  final String? id;
   final String name;
   final String logoUrl;
   final List<String> supportedLoanTypes;
   final double minIncome;
   final double maxLoanAmount;
+  final double minLoanAmount; // New
+  final int minCibilScore;    // New
+  final double multiplier;    // New
   final Map<String, dynamic> interestRate;
-  final double ltv; // Renamed from approvalRate
+  final double ltv;
   final List<String> keyFeatures;
   final String applicationUrl;
   final String tagline;
@@ -20,8 +23,11 @@ class Bank {
     required this.supportedLoanTypes,
     required this.minIncome,
     required this.maxLoanAmount,
+    this.minLoanAmount = 0.0, // New
+    this.minCibilScore = 0,   // New
+    this.multiplier = 1.0,    // New
     required this.interestRate,
-    required this.ltv, // Renamed
+    required this.ltv,
     required this.keyFeatures,
     required this.applicationUrl,
     required this.tagline,
@@ -32,18 +38,21 @@ class Bank {
   factory Bank.fromJson(Map<String, dynamic> json) {
     return Bank(
       id: json['_id'],
-      name: json['name'],
-      logoUrl: json['logoUrl'],
-      supportedLoanTypes: List<String>.from(json['supportedLoanTypes']),
-      minIncome: (json['minIncome'] as num).toDouble(),
-      maxLoanAmount: (json['maxLoanAmount'] as num).toDouble(),
-      interestRate: Map<String, dynamic>.from(json['interestRate']),
-      ltv: (json['ltv'] as num).toDouble(), // Renamed
-      keyFeatures: List<String>.from(json['keyFeatures']),
-      applicationUrl: json['applicationUrl'],
-      tagline: json['tagline'],
-      minAge: json['minAge'],
-      maxAge: json['maxAge'],
+      name: json['name'] ?? 'Unknown Bank',
+      logoUrl: json['logoUrl'] ?? '',
+      supportedLoanTypes: json['supportedLoanTypes'] != null ? List<String>.from(json['supportedLoanTypes']) : [],
+      minIncome: (json['minIncome'] as num?)?.toDouble() ?? 0.0,
+      maxLoanAmount: (json['maxLoanAmount'] as num?)?.toDouble() ?? 0.0,
+      minLoanAmount: (json['minLoanAmount'] as num?)?.toDouble() ?? 0.0, // New
+      minCibilScore: (json['minCibilScore'] as num?)?.toInt() ?? 0,     // New
+      multiplier: (json['multiplier'] as num?)?.toDouble() ?? 1.0,      // New
+      interestRate: json['interestRate'] != null ? Map<String, dynamic>.from(json['interestRate']) : {'min': 0, 'max': 0},
+      ltv: (json['ltv'] as num?)?.toDouble() ?? (json['approvalRate'] as num?)?.toDouble() ?? 0.0,
+      keyFeatures: json['keyFeatures'] != null ? List<String>.from(json['keyFeatures']) : [],
+      applicationUrl: json['applicationUrl'] ?? '',
+      tagline: json['tagline'] ?? '',
+      minAge: (json['minAge'] as num?)?.toInt(),
+      maxAge: (json['maxAge'] as num?)?.toInt(),
     );
   }
 
@@ -54,8 +63,11 @@ class Bank {
       'supportedLoanTypes': supportedLoanTypes,
       'minIncome': minIncome,
       'maxLoanAmount': maxLoanAmount,
+      'minLoanAmount': minLoanAmount, // New
+      'minCibilScore': minCibilScore, // New
+      'multiplier': multiplier,       // New
       'interestRate': interestRate,
-      'ltv': ltv, // Renamed
+      'ltv': ltv,
       'keyFeatures': keyFeatures,
       'applicationUrl': applicationUrl,
       'tagline': tagline,
