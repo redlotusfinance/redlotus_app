@@ -5,13 +5,25 @@ import '../models/existing_loan_model.dart';
 import '../config.dart';
 
 class BankService {
-  Future<List<Bank>> getMatchedBanks(String loanPurpose, double monthlyIncome, List<ExistingLoan> existingLoans) async {
+  Future<List<Bank>> getMatchedBanks({
+    required String loanPurpose,
+    required double monthlyIncome,
+    required List<ExistingLoan> existingLoans,
+    required String? cibilScore,
+    required DateTime? dateOfBirth,
+    required String? residenceType,
+    required String? rentDuration,
+  }) async {
     final uri = Uri.parse('$apiBaseUrl/api/banks/match');
     
     final body = {
       'loanPurpose': loanPurpose,
       'monthlyIncome': monthlyIncome,
       'existingLoans': existingLoans.map((e) => e.toJson()).toList(),
+      'cibilScore': cibilScore,
+      'dateOfBirth': dateOfBirth?.toIso8601String(),
+      'residenceType': residenceType,
+      'rentDuration': rentDuration,
     };
 
     final response = await http.post(

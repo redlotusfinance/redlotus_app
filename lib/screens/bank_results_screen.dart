@@ -8,12 +8,20 @@ class BankResultsScreen extends StatefulWidget {
   final String loanPurpose;
   final double monthlyIncome;
   final List<ExistingLoan> existingLoans;
+  final String? cibilScore;
+  final DateTime? dateOfBirth;
+  final String? residenceType;
+  final String? rentDuration;
 
   const BankResultsScreen({
     super.key,
     required this.loanPurpose,
     required this.monthlyIncome,
     required this.existingLoans,
+    required this.cibilScore,
+    required this.dateOfBirth,
+    required this.residenceType,
+    required this.rentDuration,
   });
 
   @override
@@ -27,9 +35,13 @@ class _BankResultsScreenState extends State<BankResultsScreen> {
   void initState() {
     super.initState();
     _matchedBanksFuture = BankService().getMatchedBanks(
-      widget.loanPurpose,
-      widget.monthlyIncome,
-      widget.existingLoans,
+      loanPurpose: widget.loanPurpose,
+      monthlyIncome: widget.monthlyIncome,
+      existingLoans: widget.existingLoans,
+      cibilScore: widget.cibilScore,
+      dateOfBirth: widget.dateOfBirth,
+      residenceType: widget.residenceType,
+      rentDuration: widget.rentDuration,
     );
   }
 
@@ -54,7 +66,7 @@ class _BankResultsScreenState extends State<BankResultsScreen> {
               child: Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  'No banks found matching your criteria based on your income and existing obligations.',
+                  'No banks found matching your criteria based on your profile.',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16),
                 ),

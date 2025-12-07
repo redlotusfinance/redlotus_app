@@ -16,6 +16,7 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
 
     // Define the list of professions
     final List<String> professions = [
+      'Govt Employee', // Added at the top
       'Salaried',
       'Self-Employed',
       'Professional',
@@ -141,7 +142,7 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
               const SizedBox(height: 16),
               
               DropdownButtonFormField<String>(
-                initialValue: formProvider.loanPurpose,
+                value: formProvider.loanPurpose,
                 decoration: const InputDecoration(labelText: 'Loan Purpose'),
                 items: loanPurposes
                     .map((label) => DropdownMenuItem(
@@ -156,7 +157,7 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
               const SizedBox(height: 16),
 
               DropdownButtonFormField<String>(
-                initialValue: formProvider.loanType,
+                value: formProvider.loanType,
                 decoration: const InputDecoration(labelText: 'Loan Type'),
                 items: loanTypes
                     .map((label) => DropdownMenuItem(
@@ -173,7 +174,7 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
 
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Profession'),
-                initialValue: formProvider.profession,
+                value: formProvider.profession,
                 items: professions
                     .map((label) => DropdownMenuItem(
                           value: label,
@@ -203,7 +204,7 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
                   padding: const EdgeInsets.only(top: 16.0),
                   child: DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Type of Firm'),
-                    initialValue: formProvider.firmType,
+                    value: formProvider.firmType,
                     items: firmTypes
                         .map((label) => DropdownMenuItem(
                               value: label,
@@ -219,7 +220,7 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
                   padding: const EdgeInsets.only(top: 16.0),
                   child: DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Designation'),
-                    initialValue: formProvider.selfEmployedDesignation,
+                    value: formProvider.selfEmployedDesignation,
                     items: selfEmployedDesignations
                         .map((label) => DropdownMenuItem(
                               value: label,
@@ -276,7 +277,7 @@ class _FormStepPersonalState extends State<FormStepPersonal> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                initialValue: formProvider.maritalStatus,
+                value: formProvider.maritalStatus,
                 decoration: const InputDecoration(labelText: 'Marital Status'),
                 items: ['Single', 'Married', 'Divorced', 'Widowed']
                     .map((label) => DropdownMenuItem(

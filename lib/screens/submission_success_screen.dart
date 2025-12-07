@@ -43,6 +43,10 @@ class SubmissionSuccessScreen extends StatelessWidget {
                         loanPurpose: formProvider.loanPurpose ?? 'Personal', 
                         monthlyIncome: formProvider.monthlyIncome ?? 0,
                         existingLoans: formProvider.existingLoansList,
+                        cibilScore: formProvider.cibilScore,
+                        dateOfBirth: formProvider.dateOfBirth,
+                        residenceType: formProvider.residenceType,
+                        rentDuration: formProvider.rentDuration,
                       ),
                     ),
                   );
